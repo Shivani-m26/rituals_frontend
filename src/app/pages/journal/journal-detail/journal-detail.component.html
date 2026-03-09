@@ -1,0 +1,41 @@
+<div class="max-w-4xl mx-auto animate-fade-in pb-12">
+  <div class="mb-6 flex items-center gap-4">
+    <a routerLink="/journal/history" class="text-coffee-light hover:text-coffee flex items-center gap-1 transition-colors">
+      ← Back to History
+    </a>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center py-20">
+    <div class="animate-spin text-4xl">⌛</div>
+  </div>
+
+  <article *ngIf="!loading && journal" 
+           class="journal-card p-12 shadow-sticky min-h-[700px] relative overflow-hidden flex flex-col"
+           [ngClass]="getThemeClass(journal.themeId)">
+    
+    <!-- Decorative tape -->
+    <div class="absolute top-4 left-1/2 -translate-x-1/2 w-40 h-10 bg-pastel-pink/20 -rotate-1 z-10 shadow-sm pointer-events-none"></div>
+
+    <header class="mb-10 text-center relative z-0">
+      <div class="text-coffee/40 text-sm font-bold uppercase tracking-[0.2em] mb-4">
+        {{ journal.date | date:'EEEE, MMMM d, y' }}
+      </div>
+      <h1 class="font-handwritten text-5xl md:text-6xl text-coffee-dark leading-tight">
+        {{ journal.title }}
+      </h1>
+    </header>
+
+    <div class="font-handwritten text-2xl text-coffee leading-[2] whitespace-pre-wrap grow p-4"
+         [style.font-family]="journal.fontFamily">
+      {{ journal.content }}
+    </div>
+
+    <footer class="mt-12 pt-8 border-t border-coffee/5 text-center italic text-coffee/30 font-handwritten text-xl">
+      Another beautiful ritual recorded. ✨
+    </footer>
+  </article>
+
+  <div *ngIf="!loading && !journal" class="text-center py-20">
+    <p class="text-coffee-light">Journal entry not found. 📓</p>
+  </div>
+</div>

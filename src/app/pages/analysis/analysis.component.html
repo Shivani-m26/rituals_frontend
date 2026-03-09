@@ -1,0 +1,279 @@
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <!-- Analysis Steps Container -->
+    <div class="bg-white rounded-journal shadow-journal border-2 border-cream p-8 md:p-12 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+            <span class="text-8xl font-handwritten">Ritual</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-coffee font-handwritten text-2xl">Page {{ step }} of 7</span>
+                <span class="text-coffee-light italic text-sm">{{ step === 1 ? 'Identity' : step === 2 ? 'Kingdom' : step === 3 ? 'Focus' : step === 4 ? 'Intensity' : step === 5 ? 'Time' : 'Selection' }}</span>
+            </div>
+            <div class="h-2 bg-cream rounded-full overflow-hidden">
+                <div class="h-full bg-pastel-pink transition-all duration-500" [style.width.%]="(step/7)*100"></div>
+            </div>
+        </div>
+
+        <!-- Step 1: Profile (Bio) -->
+        <div *ngIf="step === 1" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Who are you?</h2>
+                <p class="text-coffee-light italic">Your journey is unique. Let's start with the basics.</p>
+            </div>
+
+            <form [formGroup]="bioForm" class="max-w-md mx-auto space-y-6">
+                <div>
+                    <label class="block font-handwritten text-2xl text-coffee mb-2">Your Age</label>
+                    <input type="number" formControlName="age" 
+                        class="w-full px-4 py-3 bg-cream border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-pastel-pink transition-all">
+                </div>
+                <div>
+                    <label class="block font-handwritten text-2xl text-coffee mb-2">Your Gender</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" (click)="bioForm.get('gender')?.setValue('Male')"
+                            [class.bg-pastel-pink]="bioForm.get('gender')?.value === 'Male'"
+                            [class.bg-cream]="bioForm.get('gender')?.value !== 'Male'"
+                            class="py-4 rounded-2xl text-coffee font-bold shadow-sm transition-all hover:scale-[1.02]">
+                            Male ♂️
+                        </button>
+                        <button type="button" (click)="bioForm.get('gender')?.setValue('Female')"
+                            [class.bg-pastel-pink]="bioForm.get('gender')?.value === 'Female'"
+                            [class.bg-cream]="bioForm.get('gender')?.value !== 'Female'"
+                            class="py-4 rounded-2xl text-coffee font-bold shadow-sm transition-all hover:scale-[1.02]">
+                            Female ♀️
+                        </button>
+                    </div>
+                </div>
+                <button (click)="nextStep()" [disabled]="bioForm.invalid"
+                    class="w-full bg-pastel-pink text-coffee-dark font-handwritten text-3xl py-4 rounded-sticky shadow-sticky hover:scale-[1.02] transition-all disabled:opacity-50">
+                    Next Page 🖋️
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Domains -->
+        <div *ngIf="step === 2" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Pick a Kingdom</h2>
+                <p class="text-coffee-light italic">Where do you want to see growth today?</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                <button *ngFor="let domain of domains" 
+                    (click)="selectDomain(domain)"
+                    [class.ring-4]="selectedDomain?.name === domain.name"
+                    [class.ring-pastel-pink]="selectedDomain?.name === domain.name"
+                    class="bg-cream/40 p-6 rounded-journal border-2 border-dashed border-coffee/10 hover:border-pastel-pink transition-all text-center group">
+                    <span class="text-4xl block mb-2 group-hover:scale-110 transition-transform">{{ domain.icon }}</span>
+                    <span class="text-coffee font-handwritten text-2xl block">{{ domain.name }}</span>
+                </button>
+            </div>
+
+            <div class="flex justify-center gap-6 pt-4">
+                <button (click)="prevStep()" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                <button (click)="nextStep()" [disabled]="!selectedDomain"
+                    class="bg-soft-yellow text-coffee-dark font-handwritten text-3xl px-12 py-4 rounded-sticky shadow-sticky hover:scale-[1.02] disabled:opacity-50 transition-all">
+                    Next Page 🖋️
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Preferences (Up to 3) -->
+        <div *ngIf="step === 3" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Refine Your Focus</h2>
+                <p class="text-coffee-light italic">Select up to 3 areas in {{ selectedDomain?.name }} that resonate with you.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
+                <button *ngFor="let pref of selectedDomain?.preferences" 
+                    (click)="togglePreference(pref)"
+                    [class.bg-pastel-pink]="selectedPreferences.includes(pref)"
+                    [class.bg-cream]="!selectedPreferences.includes(pref)"
+                    class="px-6 py-3 rounded-full text-coffee font-bold border-2 border-transparent hover:border-pastel-pink transition-all shadow-sm">
+                    {{ pref }}
+                </button>
+            </div>
+
+            <div class="text-center text-coffee-light italic" *ngIf="selectedPreferences.length > 0">
+                Selected: {{ selectedPreferences.length }} / 3
+            </div>
+
+            <div class="flex justify-center gap-6 pt-4">
+                <button (click)="prevStep()" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                <button (click)="nextStep()" [disabled]="selectedPreferences.length === 0"
+                    class="bg-soft-yellow text-coffee-dark font-handwritten text-3xl px-12 py-4 rounded-sticky shadow-sticky hover:scale-[1.02] disabled:opacity-50 transition-all">
+                    Continue ✨
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Difficulty Selection -->
+        <div *ngIf="step === 4" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Set the Intensity</h2>
+                <p class="text-coffee-light italic">How much of a challenge are you ready for?</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-8 max-w-xl mx-auto">
+                <button *ngFor="let diff of ['Easy', 'Medium', 'Hard']"
+                    (click)="preferencesForm.get('difficulty')?.setValue(diff)"
+                    [class.ring-4]="preferencesForm.get('difficulty')?.value === diff"
+                    [class.ring-pastel-pink]="preferencesForm.get('difficulty')?.value === diff"
+                    class="flex-1 bg-cream/40 p-8 rounded-journal text-center border-2 border-dashed border-coffee/10 hover:border-pastel-pink transition-all group">
+                    <span class="text-4xl block mb-2">{{ diff === 'Easy' ? '🌱' : diff === 'Medium' ? '🌿' : '🌳' }}</span>
+                    <span class="text-coffee font-handwritten text-3xl">{{ diff }}</span>
+                </button>
+            </div>
+
+            <div class="flex justify-center gap-6 pt-8">
+                <button (click)="prevStep()" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                <button (click)="nextStep()" 
+                    class="bg-mint text-coffee-dark font-handwritten text-3xl px-12 py-4 rounded-sticky shadow-sticky hover:scale-[1.02] transition-all">
+                    Next Page 🖋️
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Time Commitment -->
+        <div *ngIf="step === 5" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Available Time</h2>
+                <p class="text-coffee-light italic">How many minutes can you dedicate daily?</p>
+            </div>
+
+            <form [formGroup]="preferencesForm" class="max-w-md mx-auto space-y-8">
+                <select formControlName="timeMinutes" 
+                    class="w-full px-4 py-4 bg-cream border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-pastel-pink text-xl font-bold text-coffee transition-all text-center">
+                    <option [value]="15">15 Minutes</option>
+                    <option [value]="30">30 Minutes</option>
+                    <option [value]="45">45 Minutes</option>
+                    <option [value]="60">1 Hour</option>
+                    <option [value]="120">2 Hours</option>
+                </select>
+
+                <div class="flex justify-center gap-8 pt-4">
+                    <button (click)="prevStep()" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                    <button (click)="nextStep()" 
+                        class="bg-pastel-pink text-coffee-dark font-handwritten text-3xl px-12 py-4 rounded-sticky shadow-sticky hover:scale-[1.02] transition-all">
+                        Find Rituals ✨
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Step 6: Recommendations -->
+        <div *ngIf="step === 6" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">Curated for You</h2>
+                <p class="text-coffee-light italic">Rituals matching your {{ selectedDomain?.name }} path.</p>
+            </div>
+
+            <div *ngIf="isLoading" class="flex flex-col items-center py-12">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-pastel-pink"></div>
+                <p class="mt-4 font-handwritten text-2xl text-coffee italic">Unfolding your rituals...</p>
+            </div>
+
+            <div *ngIf="!isLoading" class="space-y-6 max-w-3xl mx-auto">
+                <div *ngFor="let habit of recommendations" 
+                    (click)="selectHabit(habit)"
+                    class="bg-cream/30 p-8 rounded-journal border-2 border-dashed border-coffee/10 hover:border-pastel-pink cursor-pointer transition-all group relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-handwritten text-4xl text-coffee group-hover:text-pastel-pink transition-colors">{{ habit.name }}</h3>
+                        <span class="text-xs px-2 py-1 bg-pastel-pink/20 rounded-full text-coffee-dark uppercase tracking-widest font-bold">{{ habit.difficulty }}</span>
+                    </div>
+                    <p class="text-coffee-light italic text-sm mb-4">{{ habit.description }}</p>
+                    <div class="flex gap-4 items-center">
+                        <span class="flex items-center text-coffee-light text-xs">
+                            <span class="mr-1">⏱️</span> {{ habit.timeMinutes }} mins
+                        </span>
+                        <span class="flex items-center text-coffee-light text-xs">
+                            <span class="mr-1">🎯</span> {{ habit.preference }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Custom Habit Option -->
+                <div (click)="switchToCustom()" 
+                    class="bg-soft-yellow/10 p-8 rounded-journal border-2 border-dashed border-soft-yellow/50 hover:border-soft-yellow cursor-pointer transition-all text-center group">
+                    <h3 class="font-handwritten text-3xl text-coffee">Add Your Own Habit 🖋️</h3>
+                    <p class="text-coffee-light italic text-sm">Can't find what you need? Inscribe a custom ritual.</p>
+                </div>
+
+                <div class="flex justify-center pt-8">
+                    <button (click)="prevStep()" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Planning & Commitment -->
+        <div *ngIf="step === 7" class="space-y-8 animate-fade-in">
+            <div class="text-center">
+                <h2 class="text-5xl font-handwritten text-coffee mb-2">
+                    {{ analysisMode === 'custom' ? 'Inscribe Ritual' : 'Commitment' }}
+                </h2>
+                <p class="text-coffee-light italic">Finalize your transformation into {{ selectedHabit?.name || 'a new you' }}.</p>
+            </div>
+
+            <form *ngIf="analysisMode === 'custom'" [formGroup]="customHabitForm" class="max-w-md mx-auto space-y-4 mb-8">
+                <input type="text" formControlName="name" placeholder="Ritual Name (e.g. Speak English Practice)"
+                    class="w-full px-4 py-3 bg-cream border-none rounded-xl shadow-inner font-bold text-coffee">
+                <textarea formControlName="description" placeholder="Practice speaking English by explaining a topic out loud..."
+                    class="w-full px-4 py-3 bg-cream border-none rounded-xl shadow-inner h-24 text-sm"></textarea>
+            </form>
+
+            <form [formGroup]="planForm" class="max-w-md mx-auto space-y-8">
+                <!-- Plan Duration -->
+                <div>
+                    <label class="block font-handwritten text-2xl text-coffee mb-4">Duration</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" *ngFor="let plan of [{val:'14', label:'14 Days'}, {val:'21', label:'21 Days'}, {val:'48', label:'48 Days'}, {val:'Infinite', label:'Eternal'}]"
+                            (click)="planForm.get('planType')?.setValue(plan.val)"
+                            [class.bg-pastel-pink]="planForm.get('planType')?.value === plan.val"
+                            [class.bg-cream]="planForm.get('planType')?.value !== plan.val"
+                            class="p-4 rounded-2xl text-sm font-bold text-coffee shadow-sm transition-all hover:scale-[1.02]">
+                            {{ plan.label }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Timing -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block font-handwritten text-xl text-coffee mb-2">Start Date</label>
+                        <input type="date" formControlName="startDate" 
+                            class="w-full px-4 py-3 bg-cream border-none rounded-xl shadow-inner text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-handwritten text-xl text-coffee mb-2">Preferred Time</label>
+                        <div class="flex gap-2">
+                            <select [(ngModel)]="selectedHour" [ngModelOptions]="{standalone: true}"
+                                class="w-1/4 px-2 py-3 bg-cream border-none rounded-xl shadow-inner text-xs font-bold">
+                                <option *ngFor="let h of hours" [value]="h">{{ h }}</option>
+                            </select>
+                            <select [(ngModel)]="selectedMinute" [ngModelOptions]="{standalone: true}"
+                                class="w-1/4 px-2 py-3 bg-cream border-none rounded-xl shadow-inner text-xs">
+                                <option *ngFor="let m of ['00','15','30','45']" [value]="m">{{ m }}</option>
+                            </select>
+                            <select [(ngModel)]="selectedPeriod" [ngModelOptions]="{standalone: true}"
+                                class="w-2/5 px-2 py-3 bg-cream border-none rounded-xl shadow-inner text-xs font-bold">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-6 pt-4">
+                    <button (click)="step = (analysisMode === 'custom' ? 6 : 6)" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                    <button (click)="startHabit()" [disabled]="isLoading"
+                        class="bg-pastel-pink text-coffee-dark font-handwritten text-4xl px-16 py-5 rounded-sticky shadow-sticky hover:scale-110 active:scale-95 transition-all">
+                        {{ isLoading ? 'Entering...' : 'Inscribe 🖋️' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+/* Analysis styles */
+.rounded-journal {
+    border-radius: 2rem;
+}
+
+.shadow-journal {
+    box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+}
+
+.rounded-sticky {
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.shadow-sticky {
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.05);
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

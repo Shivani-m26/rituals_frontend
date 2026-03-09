@@ -1,0 +1,90 @@
+<nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-coffee/5">
+    <div class="washi-tape"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <!-- Logo -->
+        <a routerLink="/" class="flex items-center gap-2 cursor-pointer group">
+          <span class="text-3xl">📓</span>
+          <span class="font-handwritten text-3xl font-bold text-coffee tracking-wide group-hover:text-coffee-dark transition-colors">Rituals.</span>
+        </a>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-1">
+          <a routerLink="/" routerLinkActive="bg-cream-dark text-coffee" [routerLinkActiveOptions]="{exact: true}" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Home</a>
+          
+          <ng-container *ngIf="authService.isLoggedIn$() | async">
+            <a routerLink="/todo" routerLinkActive="bg-cream-dark text-coffee" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Todo</a>
+            <a routerLink="/tracker" routerLinkActive="bg-cream-dark text-coffee" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">My Habits</a>
+            <a routerLink="/journal" routerLinkActive="bg-cream-dark text-coffee" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Journal</a>
+            <a routerLink="/analysis" routerLinkActive="bg-cream-dark text-coffee" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Analysis</a>
+            <a routerLink="/leaderboard" routerLinkActive="bg-cream-dark text-coffee" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Leaderboard</a>
+            
+            <div class="h-6 w-px bg-coffee/10 mx-2"></div>
+            
+            <div class="flex items-center gap-2">
+              <a routerLink="/profile" class="flex items-center gap-2 px-3 py-1.5 hover:bg-cream-dark rounded-full transition-all group">
+                <span class="w-8 h-8 rounded-full bg-cream border border-coffee/10 flex items-center justify-center text-sm shadow-sm">👤</span>
+                <span class="text-sm font-handwritten text-coffee-dark font-bold text-lg">{{ authService.getCurrentUser()?.username }}</span>
+              </a>
+              <button (click)="logout()" class="p-2 text-coffee-light hover:text-red-400 transition-colors" title="Logout">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!(authService.isLoggedIn$() | async)">
+            <a routerLink="/login" class="px-4 py-2 text-sm font-medium text-coffee-light hover:text-coffee hover:bg-cream-dark rounded-full transition-all duration-200">Login</a>
+            <a routerLink="/register" class="ml-2 px-5 py-2 text-sm font-semibold text-white bg-coffee hover:bg-coffee-dark rounded-full shadow-sticky hover:shadow-sticky-hover transition-all duration-300 hover:-translate-y-0.5">
+              ✨ Start Journey
+            </a>
+          </ng-container>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button (click)="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-coffee hover:bg-cream-dark transition-colors">
+          <svg *ngIf="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg *ngIf="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="mobileMenuOpen" class="md:hidden bg-cream/95 backdrop-blur-md border-t border-coffee/5 animate-fade-in-up">
+      <div class="px-4 py-4 space-y-2">
+        <a routerLink="/" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">🏠 Home</a>
+        
+        <ng-container *ngIf="authService.isLoggedIn$() | async">
+          <a routerLink="/profile" (click)="toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">
+            <span class="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-coffee/5 shadow-sm">👤</span>
+            <div class="flex flex-col">
+              <span class="font-bold text-coffee-dark">{{ authService.getCurrentUser()?.username }}</span>
+              <span class="text-xs text-coffee-light italic">View Profile</span>
+            </div>
+          </a>
+          <div class="h-px bg-coffee/5 mx-4 my-1"></div>
+          <a routerLink="/todo" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">✅ Todo</a>
+          <a routerLink="/tracker" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">📈 My Habits</a>
+          <a routerLink="/journal" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">📓 Journal</a>
+          <a routerLink="/analysis" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">📊 Analysis</a>
+          <a routerLink="/leaderboard" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">🏆 Leaderboard</a>
+          <button (click)="logout()" class="w-full text-left px-4 py-4 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition-colors flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Sign Out
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="!(authService.isLoggedIn$() | async)">
+          <a routerLink="/login" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-medium text-coffee hover:bg-cream-dark rounded-xl transition-colors">🔑 Login</a>
+          <a routerLink="/register" (click)="toggleMobileMenu()" class="block px-4 py-3 text-sm font-semibold text-white bg-coffee rounded-xl text-center shadow-sticky">✨ Start Journey</a>
+        </ng-container>
+      </div>
+    </div>
+</nav>

@@ -1,0 +1,61 @@
+<div class="min-h-screen flex items-center justify-center bg-cream px-4 py-12 sm:px-6 lg:px-8 font-sans">
+    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-journal shadow-journal border-2 border-pastel-pink-light relative overflow-hidden animate-fade-in-up">
+        
+        <!-- Decoration bits -->
+        <div class="absolute -top-6 -left-6 w-24 h-24 bg-baby-blue opacity-30 rounded-full blur-xl animate-float"></div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-mint opacity-30 rounded-full blur-xl animate-float-slow"></div>
+        <div class="absolute top-1/4 right-2 w-10 h-2 bg-soft-yellow opacity-30 -rotate-12 rounded-full"></div>
+
+        <div class="text-center relative z-10">
+            <h2 class="text-4xl font-handwritten text-coffee-dark mb-2">Welcome Back</h2>
+            <p class="text-coffee-light font-medium italic">Your stories are waiting for you</p>
+        </div>
+
+        <form class="mt-8 space-y-6 relative z-10" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-handwritten text-coffee text-xl ml-1">Email Post</label>
+                    <input id="email" formControlName="email" type="email" required
+                        class="mt-1 block w-full px-4 py-3 bg-cream-dark border-none rounded-sticky text-coffee shadow-sticky focus:ring-2 focus:ring-pastel-pink transition-all duration-300"
+                        placeholder="you@example.com">
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="block text-sm font-handwritten text-coffee text-xl ml-1">Secret Key</label>
+                        <a href="#" class="text-xs text-coffee-light hover:text-coffee transition-colors italic">Lost your key?</a>
+                    </div>
+                    <input id="password" formControlName="password" type="password" required
+                        class="mt-1 block w-full px-4 py-3 bg-cream-dark border-none rounded-sticky text-coffee shadow-sticky focus:ring-2 focus:ring-pastel-pink transition-all duration-300"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="bg-red-50 text-red-500 p-3 rounded-sticky text-sm italic animate-wiggle border border-red-100">
+                {{ errorMessage }}
+            </div>
+
+            <div>
+                <button type="submit" [disabled]="loginForm.invalid || isLoading"
+                    class="w-full relative group overflow-hidden bg-pastel-pink px-4 py-3 rounded-sticky text-coffee-dark font-handwritten text-2xl shadow-sticky-hover hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span class="relative z-10 flex items-center justify-center">
+                        <span *ngIf="!isLoading">Open My Journal</span>
+                        <span *ngIf="isLoading" class="flex items-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-coffee-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Finding the page...
+                        </span>
+                    </span>
+                    <div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center mt-6 text-coffee-light relative z-10">
+            <span class="text-sm italic">New to the circle? </span>
+            <a routerLink="/register" class="text-brand-primary font-handwritten text-xl hover:underline underline-offset-4 decoration-mint transition-all">Join Us</a>
+        </div>
+    </div>
+</div>

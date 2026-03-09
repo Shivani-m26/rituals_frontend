@@ -1,0 +1,58 @@
+<div class="animate-fade-in">
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="font-handwritten text-4xl text-coffee-dark">Your Journal Journey 📜</h2>
+    <div class="text-coffee-light text-sm italic">
+      Total Entries: {{ journals.length }}
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex justify-center py-20">
+    <div class="animate-spin text-4xl">⌛</div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && journals.length === 0" class="text-center py-20 bg-white/40 rounded-3xl border-2 border-dashed border-coffee/10">
+    <span class="text-6xl mb-4 block">📒</span>
+    <h3 class="font-handwritten text-2xl text-coffee">Your diary is waiting...</h3>
+    <p class="text-coffee-light mb-6">You haven't written any entries yet.</p>
+    <a routerLink="/journal/write" class="inline-flex items-center gap-2 px-6 py-2 bg-coffee text-cream rounded-full hover:bg-coffee-dark transition-colors">
+      Write your first page ✨
+    </a>
+  </div>
+
+  <!-- Journal Cards Grid -->
+  <div *ngIf="!loading && journals.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let j of journals" 
+         [routerLink]="['/journal/history', j.id]"
+         class="cursor-pointer group">
+      <div class="journal-card h-64 flex flex-col p-6 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-sticky-hover relative overflow-hidden"
+           [ngClass]="getThemeClass(j.themeId)">
+        
+        <!-- Tape decoration -->
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-8 bg-soft-yellow/40 -rotate-2 z-10"></div>
+        
+        <div class="flex justify-between items-start mb-4 relative z-0">
+          <span class="text-xs font-bold text-coffee/40 uppercase tracking-widest">
+            {{ j.date | date:'MMM d, y' }}
+          </span>
+          <span class="text-xl">📓</span>
+        </div>
+
+        <h3 class="font-handwritten text-2xl text-coffee-dark mb-3 line-clamp-2">
+          {{ j.title }}
+        </h3>
+
+        <p class="text-coffee-light text-sm font-handwritten line-clamp-4 leading-relaxed">
+          {{ j.content }}
+        </p>
+
+        <div class="mt-auto flex justify-end">
+          <span class="text-coffee/30 text-xs italic group-hover:text-pastel-pink transition-colors">
+            Read Entry →
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

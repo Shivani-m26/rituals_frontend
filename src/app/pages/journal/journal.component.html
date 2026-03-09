@@ -1,0 +1,29 @@
+<div class="min-h-screen bg-cream/30">
+  <!-- Journal Sub-Navbar -->
+  <nav class="bg-white/60 backdrop-blur-sm border-b border-coffee/10 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-center h-12 items-center gap-8">
+        <a routerLink="/journal/write" 
+           routerLinkActive="text-coffee-dark border-b-2 border-pastel-pink"
+           class="px-3 py-2 text-sm font-medium text-coffee-light hover:text-coffee transition-colors flex items-center gap-2">
+           <span>✍️</span> Home
+        </a>
+        <a routerLink="/journal/history" 
+           routerLinkActive="text-coffee-dark border-b-2 border-pastel-pink"
+           class="px-3 py-2 text-sm font-medium text-coffee-light hover:text-coffee transition-colors flex items-center gap-2">
+           <span>📜</span> History
+        </a>
+        <!-- Profile could be a placeholder or actual profile link -->
+        <a routerLink="/profile" 
+           class="px-3 py-2 text-sm font-medium text-coffee-light hover:text-coffee transition-colors flex items-center gap-2">
+           <span>👤</span> Profile
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <router-outlet></router-outlet>
+  </main>
+</div>

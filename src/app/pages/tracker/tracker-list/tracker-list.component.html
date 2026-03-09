@@ -1,0 +1,96 @@
+<div class="max-w-6xl mx-auto py-12 px-4 animate-fade-in">
+    <!-- Points Summary Card -->
+    <div class="mb-12 bg-white rounded-journal shadow-journal border-2 border-cream p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-6">
+            <div class="w-20 h-20 bg-soft-yellow/20 rounded-full flex items-center justify-center border-2 border-soft-yellow animate-pulse">
+                <span class="text-4xl">✨</span>
+            </div>
+            <div>
+                <h2 class="text-5xl font-handwritten text-coffee">Ritual Ledger</h2>
+                <p class="text-coffee-light italic">Your journey inscribed in time...</p>
+            </div>
+        </div>
+        
+        <div class="text-center md:text-right">
+            <p class="text-[10px] uppercase font-bold text-coffee-light tracking-widest mb-1">Lifetime Wisdom Points</p>
+            <div class="flex items-center justify-center md:justify-end gap-2">
+                <span class="text-6xl font-handwritten text-mint-dark">⭐</span>
+                <span class="text-6xl font-handwritten text-coffee">{{ totalPoints }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-8">
+        <h3 class="font-handwritten text-4xl text-coffee">All Rituals</h3>
+        <a routerLink="/analysis" class="bg-pastel-pink text-coffee-dark font-handwritten text-2xl px-8 py-3 rounded-sticky hover:scale-105 transition-all shadow-sticky">
+            New Ritual 🖋️
+        </a>
+    </div>
+
+    <div *ngIf="isLoading" class="flex flex-col items-center py-24">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-pastel-pink"></div>
+        <p class="mt-4 font-handwritten text-2xl text-coffee italic">Opening your archives...</p>
+    </div>
+
+    <!-- Unified Table -->
+    <div *ngIf="!isLoading && allHabits.length > 0" class="bg-white rounded-journal shadow-journal border-2 border-cream overflow-hidden mb-12">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-cream/20 text-coffee-light text-[10px] uppercase tracking-widest font-bold border-b border-cream">
+                    <tr>
+                        <th class="px-6 py-5">Ritual Name</th>
+                        <th class="px-6 py-5">Domain / Category</th>
+                        <th class="px-6 py-5">Duration</th>
+                        <th class="px-6 py-5">Status</th>
+                        <th class="px-6 py-5">Wisdom Points</th>
+                        <th class="px-6 py-5 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-cream/50">
+                    <tr *ngFor="let habit of allHabits" 
+                        class="hover:bg-cream/10 transition-all cursor-pointer group"
+                        [class.opacity-60]="!habit.isActive"
+                        [routerLink]="['/tracker', habit.id]">
+                        <td class="px-6 py-6">
+                            <div class="flex flex-col">
+                                <span class="font-handwritten text-3xl text-coffee group-hover:text-coffee-dark">{{ habit.name }}</span>
+                                <span *ngIf="habit.streakCount > 0" class="text-[10px] font-bold text-orange-500 uppercase tracking-tighter">🔥 {{ habit.streakCount }} Day Streak</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-6">
+                            <span class="px-3 py-1 bg-cream text-coffee-light text-[10px] rounded-full uppercase font-bold">{{ habit.domain }}</span>
+                        </td>
+                        <td class="px-6 py-6 font-medium text-coffee">
+                            {{ habit.planType === 'Infinite' ? 'Eternal' : habit.planType + ' Days' }}
+                        </td>
+                        <td class="px-6 py-6">
+                            <span *ngIf="habit.isActive" class="inline-flex items-center gap-1 text-mint-dark font-bold text-xs">
+                                <span class="w-2 h-2 bg-mint rounded-full animate-ping"></span>
+                                ACTIVE
+                            </span>
+                            <span *ngIf="!habit.isActive" class="text-coffee-light/50 font-bold text-xs line-through">ARCHIVED</span>
+                        </td>
+                        <td class="px-6 py-6 font-bold text-xl text-coffee">
+                            ⭐ {{ habit.totalPointsAttained }}
+                        </td>
+                        <td class="px-6 py-6 text-center" (click)="$event.stopPropagation()">
+                            <button *ngIf="habit.isActive" (click)="dropHabit(habit.id)" 
+                                    class="text-[10px] uppercase font-bold text-pastel-pink hover:text-red-600 transition-colors tracking-widest">
+                                Drop 👋
+                            </button>
+                            <span *ngIf="!habit.isActive" class="text-[10px] uppercase font-bold text-coffee-light/30 tracking-widest italic">Freezed</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && allHabits.length === 0" class="text-center py-24 bg-white rounded-journal border-2 border-dashed border-coffee/10">
+        <p class="font-handwritten text-4xl text-coffee mb-6">Your ledger is silent...</p>
+        <p class="text-coffee-light mb-12 italic">No rituals have been inscribed in your journey yet.</p>
+        <a routerLink="/analysis" class="bg-pastel-pink text-coffee-dark font-handwritten text-4xl px-16 py-8 rounded-sticky shadow-sticky hover:scale-110 transition-all">
+            Inscribe Your First Ritual ✨
+        </a>
+    </div>
+</div>

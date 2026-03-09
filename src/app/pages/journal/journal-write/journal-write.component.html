@@ -1,0 +1,121 @@
+<div class="max-w-4xl mx-auto animate-fade-in">
+  <!-- Toolbar -->
+  <div class="sticky-note bg-white/80 backdrop-blur-md mb-6 p-4 flex flex-wrap items-center justify-between gap-4 border border-coffee/5 shadow-sm">
+    <!-- Sheet Selection -->
+    <div class="flex items-center gap-2 bg-cream/50 p-1 rounded-lg">
+      <button *ngFor="let s of sheets" 
+              (click)="selectSheet(s)"
+              [class.bg-white]="selectedSheet.id === s.id"
+              [class.shadow-sm]="selectedSheet.id === s.id"
+              class="w-10 h-10 flex items-center justify-center rounded-md text-xl hover:bg-white/50 transition-all"
+              [title]="s.name">
+        {{ s.icon }}
+      </button>
+    </div>
+
+    <!-- Tools Selection -->
+    <div class="flex items-center gap-2 bg-cream/50 p-1 rounded-lg">
+      <button (click)="selectTool('pen')"
+              [class.bg-coffee]="selectedTool === 'pen'"
+              [class.text-white]="selectedTool === 'pen'"
+              class="px-4 py-2 rounded-md text-sm font-medium transition-all">
+        ✒️ Pen
+      </button>
+      <button (click)="selectTool('pencil')"
+              [class.bg-coffee]="selectedTool === 'pencil'"
+              [class.text-white]="selectedTool === 'pencil'"
+              class="px-4 py-2 rounded-md text-sm font-medium transition-all">
+        ✏️ Pencil
+      </button>
+    </div>
+
+    <!-- Color Palette -->
+    <div class="flex items-center gap-2">
+      <button *ngFor="let c of colors" 
+              (click)="selectColor(c)"
+              [style.background-color]="c"
+              [class.ring-2]="selectedColor === c"
+              class="w-6 h-6 rounded-full ring-offset-2 ring-coffee/30 transition-all hover:scale-110">
+      </button>
+    </div>
+
+    <!-- Thickness -->
+    <div class="flex items-center gap-2 bg-cream/50 p-1 rounded-lg">
+      <button *ngFor="let t of thicknesses"
+              (click)="selectThickness(t)"
+              [class.bg-coffee]="selectedThickness === t"
+              [class.text-white]="selectedThickness === t"
+              class="w-8 h-8 rounded-md flex items-center justify-center transition-all">
+        <div [style.width.px]="t" [style.height.px]="t" 
+             [class.bg-white]="selectedThickness === t"
+             [class.bg-coffee]="selectedThickness !== t"
+             class="rounded-full"></div>
+      </button>
+    </div>
+
+    <!-- Font Selection -->
+    <div class="flex items-center gap-2 bg-cream/50 p-1 rounded-lg">
+      <button *ngFor="let f of fonts"
+              (click)="selectFont(f)"
+              [class.bg-coffee]="selectedFont.id === f.id"
+              [class.text-white]="selectedFont.id === f.id"
+              [style.font-family]="f.family"
+              class="px-3 py-1 rounded-md text-xs transition-all whitespace-nowrap">
+        {{ f.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Writing Area -->
+  <div class="relative journal-card p-0 overflow-hidden shadow-sticky transition-all duration-500 min-h-[600px] flex flex-col"
+       [ngClass]="selectedSheet.class">
+    
+    <!-- Emojis Sidebar (floating) -->
+    <div class="absolute right-4 top-4 flex flex-col gap-3 z-10 bg-white/40 p-2 rounded-full backdrop-blur-[2px]">
+      <button *ngFor="let e of emojis" 
+              (click)="addEmoji(e)"
+              class="text-xl hover:scale-120 transition-transform active:scale-95">
+        {{ e }}
+      </button>
+    </div>
+
+    <textarea [(ngModel)]="journalContent"
+              [ngStyle]="textareaStyle"
+              class="w-full grow p-12 bg-transparent border-none focus:ring-0 resize-none font-handwritten text-xl placeholder:text-coffee/20 placeholder:font-handwritten"
+              placeholder="What's on your mind today? Write your story here..."></textarea>
+    
+    <div class="p-6 flex justify-center bg-white/30 backdrop-blur-[1px]">
+      <button (click)="openSubmitPopup()"
+              class="px-10 py-3 bg-coffee text-cream font-semibold rounded-full shadow-sticky hover:shadow-sticky-hover hover:scale-105 active:scale-95 transition-all">
+        Submit Entry ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- Title Confirmation Popup -->
+  <div *ngIf="showTitlePopup" 
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-coffee-dark/20 backdrop-blur-sm animate-fade-in">
+    <div class="sticky-note bg-white max-w-sm w-full p-8 shadow-2xl transform scale-100">
+      <h3 class="font-handwritten text-3xl text-coffee-dark mb-4 text-center">Name this page 📓</h3>
+      <p class="text-coffee-light text-sm text-center mb-6">Every story needs a title. What should we call today's entry?</p>
+      
+      <input type="text" [(ngModel)]="journalTitle"
+             class="w-full p-3 bg-cream/30 border border-coffee/10 rounded-xl mb-6 focus:ring-pastel-pink focus:border-pastel-pink text-coffee font-medium"
+             placeholder="e.g., A Sunny Morning, My Reflections...">
+      
+      <div class="flex gap-4">
+        <button (click)="closePopup()"
+                [disabled]="isSubmitting"
+                class="flex-1 py-3 border border-coffee/10 text-coffee-light rounded-full hover:bg-cream transition-colors disabled:opacity-50">
+          Cancel
+        </button>
+        <button (click)="submitJournal()"
+                [disabled]="isSubmitting"
+                class="flex-1 py-3 bg-coffee text-cream font-semibold rounded-full shadow-md hover:bg-coffee-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+          <span *ngIf="isSubmitting" class="animate-spin text-sm">⌛</span>
+          {{ isSubmitting ? 'Saving...' : 'Confirm' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
