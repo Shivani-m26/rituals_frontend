@@ -97,14 +97,8 @@
                             <td class="px-6 py-4 text-coffee-light italic text-sm max-w-md truncate">{{ log.remark || '---' }}</td>
                             <td class="px-6 py-4 text-center">
                                 <span *ngIf="log.isCompleted" class="text-mint font-bold italic">DONE ✅</span>
-                                <span *ngIf="!log.isCompleted && isFrozen(log.date) && log.isLogged" class="text-pastel-pink font-bold uppercase text-[10px]">MISS ❄️</span>
-                                <span *ngIf="!log.isCompleted && !log.isLogged" class="flex flex-col items-center gap-1">
-                                    <button (click)="saveProgress(log.date)" [disabled]="isSaving" 
-                                            class="px-3 py-1 bg-cream-dark text-coffee text-[10px] font-bold rounded-full hover:bg-soft-yellow transition-all border border-coffee/10">
-                                        Log Now
-                                    </button>
-                                </span>
-                                <span *ngIf="!log.isCompleted && !isFrozen(log.date) && log.isLogged" class="text-soft-yellow font-bold animate-pulse text-[10px] uppercase">Pending</span>
+                                <span *ngIf="!log.isCompleted && isFrozen(log.date)" class="text-pastel-pink font-bold uppercase text-[10px]">MISS ❄️</span>
+                                <span *ngIf="!log.isCompleted && !isFrozen(log.date)" class="text-soft-yellow font-bold animate-pulse text-[10px] uppercase">Pending</span>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <span *ngIf="log.isLogged" [class.text-mint]="log.pointsChanged > 0" [class.text-pastel-pink]="log.pointsChanged < 0" class="font-bold">
