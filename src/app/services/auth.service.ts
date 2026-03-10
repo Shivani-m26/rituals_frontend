@@ -32,6 +32,18 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(data: { email: string, token: string, newPassword: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, data);
+  }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
+
   private handleAuthSuccess(response: any): void {
     if (response.jwt) {
       localStorage.setItem('token', response.jwt);

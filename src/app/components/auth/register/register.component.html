@@ -38,15 +38,19 @@
                 </div>
 
                 <div>
-                    <label for="gender" class="block text-sm font-handwritten text-coffee text-xl ml-1">Your Identity (Optional)</label>
+                    <label for="gender" class="block text-sm font-handwritten text-coffee text-xl ml-1">Your Identity</label>
                     <select id="gender" formControlName="gender"
                         class="mt-1 block w-full px-4 py-3 bg-cream-dark border-none rounded-sticky text-coffee shadow-sticky focus:ring-2 focus:ring-mint transition-all duration-300">
                         <option value="" disabled>Choose your path...</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="non-binary">Non-Binary</option>
-                        <option value="prefer-not-to-say">Prefer not to say</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
+                </div>
+
+                <div>
+                    <label for="dob" class="block text-sm font-handwritten text-coffee text-xl ml-1">Date of Birth 🎂</label>
+                    <input id="dob" formControlName="dateOfBirth" type="date" required
+                        class="mt-1 block w-full px-4 py-3 bg-cream-dark border-none rounded-sticky text-coffee shadow-sticky focus:ring-2 focus:ring-mint transition-all duration-300">
                 </div>
             </div>
 

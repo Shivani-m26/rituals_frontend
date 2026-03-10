@@ -27,4 +27,8 @@ export class AnalysisService {
   getRecommendations(): Observable<HabitRecommendation[]> {
     return this.http.get<HabitRecommendation[]>(`${this.apiUrl}/recommendations`);
   }
+
+  getUserInfo(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user-info`);
+  }
 }

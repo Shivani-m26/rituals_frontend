@@ -13,7 +13,7 @@ export interface LeaderboardEntry {
   providedIn: 'root'
 })
 export class LeaderboardService {
-  private apiUrl = 'http://localhost:8080/api/leaderboard';
+  private apiUrl = '/api/leaderboard';
 
   constructor(private http: HttpClient) { }
 

@@ -39,7 +39,7 @@ export interface Badge {
   providedIn: 'root'
 })
 export class TrackerService {
-  private apiUrl = 'http://localhost:8080/api/habits';
+  private apiUrl = '/api/habits';
 
   constructor(private http: HttpClient) {}
 

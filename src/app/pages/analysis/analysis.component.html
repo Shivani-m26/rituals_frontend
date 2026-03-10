@@ -9,14 +9,14 @@
         <div class="mb-12">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-coffee font-handwritten text-2xl">Page {{ step }} of 7</span>
-                <span class="text-coffee-light italic text-sm">{{ step === 1 ? 'Identity' : step === 2 ? 'Kingdom' : step === 3 ? 'Focus' : step === 4 ? 'Intensity' : step === 5 ? 'Time' : 'Selection' }}</span>
+                <span class="text-coffee-light italic text-sm">{{ step === 1 ? 'Identity' : step === 2 ? 'Kingdom' : step === 3 ? 'Focus' : step === 4 ? 'Intensity' : step === 5 ? 'Time' : step === 6 ? 'Selection' : 'Commitment' }}</span>
             </div>
             <div class="h-2 bg-cream rounded-full overflow-hidden">
                 <div class="h-full bg-pastel-pink transition-all duration-500" [style.width.%]="(step/7)*100"></div>
             </div>
         </div>
 
-        <!-- Step 1: Profile (Bio) -->
+        <!-- Step 1: Profile (Bio) - DOB + Gender -->
         <div *ngIf="step === 1" class="space-y-8 animate-fade-in">
             <div class="text-center">
                 <h2 class="text-5xl font-handwritten text-coffee mb-2">Who are you?</h2>
@@ -25,9 +25,14 @@
 
             <form [formGroup]="bioForm" class="max-w-md mx-auto space-y-6">
                 <div>
-                    <label class="block font-handwritten text-2xl text-coffee mb-2">Your Age</label>
-                    <input type="number" formControlName="age" 
+                    <label class="block font-handwritten text-2xl text-coffee mb-2">Date of Birth 🎂</label>
+                    <input type="date" formControlName="dateOfBirth" 
                         class="w-full px-4 py-3 bg-cream border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-pastel-pink transition-all">
+                    <div *ngIf="userAge !== null" class="mt-2 text-center">
+                        <span class="inline-block bg-pastel-pink/20 text-coffee-dark font-handwritten text-xl px-4 py-1 rounded-full">
+                            Age: {{ userAge }} years ✨
+                        </span>
+                    </div>
                 </div>
                 <div>
                     <label class="block font-handwritten text-2xl text-coffee mb-2">Your Gender</label>
@@ -177,6 +182,13 @@
             </div>
 
             <div *ngIf="!isLoading" class="space-y-6 max-w-3xl mx-auto">
+                <!-- No results message -->
+                <div *ngIf="recommendations.length === 0" class="text-center py-12">
+                    <span class="text-6xl block mb-4">🔍</span>
+                    <p class="font-handwritten text-3xl text-coffee mb-4">No exact matches found</p>
+                    <p class="text-coffee-light italic mb-6">Try adjusting your difficulty or time preferences, or create a custom ritual below!</p>
+                </div>
+
                 <div *ngFor="let habit of recommendations" 
                     (click)="selectHabit(habit)"
                     class="bg-cream/30 p-8 rounded-journal border-2 border-dashed border-coffee/10 hover:border-pastel-pink cursor-pointer transition-all group relative">
@@ -220,8 +232,21 @@
             <form *ngIf="analysisMode === 'custom'" [formGroup]="customHabitForm" class="max-w-md mx-auto space-y-4 mb-8">
                 <input type="text" formControlName="name" placeholder="Ritual Name (e.g. Speak English Practice)"
                     class="w-full px-4 py-3 bg-cream border-none rounded-xl shadow-inner font-bold text-coffee">
-                <textarea formControlName="description" placeholder="Practice speaking English by explaining a topic out loud..."
+                <textarea formControlName="description" placeholder="Describe your ritual (e.g. Practice speaking English by explaining a topic out loud...)"
                     class="w-full px-4 py-3 bg-cream border-none rounded-xl shadow-inner h-24 text-sm"></textarea>
+                <div class="flex items-center gap-2 px-4 py-3 bg-cream/50 rounded-xl">
+                    <span class="text-lg">✍️</span>
+                    <span class="text-sm font-bold text-coffee-light uppercase tracking-widest">Self-Logged Ritual</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button type="button" *ngFor="let diff of ['Easy', 'Medium', 'Hard']"
+                        (click)="customHabitForm.get('difficulty')?.setValue(diff)"
+                        [class.bg-pastel-pink]="customHabitForm.get('difficulty')?.value === diff"
+                        [class.bg-cream]="customHabitForm.get('difficulty')?.value !== diff"
+                        class="p-2 rounded-xl text-xs font-bold text-coffee shadow-sm transition-all hover:scale-[1.02]">
+                        {{ diff }}
+                    </button>
+                </div>
             </form>
 
             <form [formGroup]="planForm" class="max-w-md mx-auto space-y-8">
@@ -267,9 +292,9 @@
                 </div>
 
                 <div class="flex justify-center gap-6 pt-4">
-                    <button (click)="step = (analysisMode === 'custom' ? 6 : 6)" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
-                    <button (click)="startHabit()" [disabled]="isLoading"
-                        class="bg-pastel-pink text-coffee-dark font-handwritten text-4xl px-16 py-5 rounded-sticky shadow-sticky hover:scale-110 active:scale-95 transition-all">
+                    <button (click)="step = 6" class="font-handwritten text-2xl text-coffee-light hover:text-coffee transition-colors">Go Back</button>
+                    <button (click)="startHabit()" [disabled]="isLoading || (analysisMode === 'custom' && customHabitForm.invalid)"
+                        class="bg-pastel-pink text-coffee-dark font-handwritten text-4xl px-16 py-5 rounded-sticky shadow-sticky hover:scale-110 active:scale-95 transition-all disabled:opacity-50">
                         {{ isLoading ? 'Entering...' : 'Inscribe 🖋️' }}
                     </button>
                 </div>

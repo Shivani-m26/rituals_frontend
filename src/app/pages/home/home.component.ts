@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { ContactComponent } from '../../components/contact/contact.component';
 
 interface CarouselSlide {
   emoji: string;
@@ -14,7 +15,7 @@ interface CarouselSlide {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, ContactComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

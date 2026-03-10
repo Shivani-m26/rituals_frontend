@@ -120,7 +120,7 @@ export class ProfileComponent implements OnInit {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get('http://localhost:8080/api/auth/me').subscribe({
+    this.authService.getProfile().subscribe({
       next: (data) => {
         this.user = data;
       },
