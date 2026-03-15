@@ -31,7 +31,7 @@ export class ForgotPasswordComponent {
     this.resetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       token: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-+=_]).+$')]],
       confirmPassword: ['', [Validators.required]]
     });
   }

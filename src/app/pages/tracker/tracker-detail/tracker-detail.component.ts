@@ -36,21 +36,33 @@ export class TrackerDetailComponent implements OnInit {
   }
 
   loadData() {
-    this.trackerService.getActiveHabits().subscribe((habits: UserHabit[]) => {
-      this.habit = habits.find((h: UserHabit) => h.id === this.habitId) || null;
-      if (this.habit) {
-        this.trackerService.getHabitLogs(this.habitId).subscribe((logs: TrackerLog[]) => {
-          this.logs = logs;
-          this.generateDisplayLogs(logs);
-          
-          const todayLog = logs.find((l: TrackerLog) => l.date === this.today);
-          if (todayLog) {
-            this.todayRemark = todayLog.remark;
-            this.todayCompleted = todayLog.isCompleted;
-          }
+    this.trackerService.getActiveHabits().subscribe({
+      next: (habits: UserHabit[]) => {
+        this.habit = habits.find((h: UserHabit) => h.id === this.habitId) || null;
+        if (this.habit) {
+          this.trackerService.getHabitLogs(this.habitId).subscribe({
+            next: (logs: TrackerLog[]) => {
+              this.logs = logs;
+              this.generateDisplayLogs(logs);
+              
+              const todayLog = logs.find((l: TrackerLog) => l.date === this.today);
+              if (todayLog) {
+                this.todayRemark = todayLog.remark;
+                this.todayCompleted = todayLog.isCompleted;
+              }
+              this.isLoading = false;
+            },
+            error: (err) => {
+              console.error('Failed to load logs', err);
+              this.isLoading = false;
+            }
+          });
+        } else {
           this.isLoading = false;
-        });
-      } else {
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load habits', err);
         this.isLoading = false;
       }
     });
