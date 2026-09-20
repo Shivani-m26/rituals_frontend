@@ -38,7 +38,7 @@ export class LoginComponent {
           this.router.navigate(['/']);
         },
         error: (err) => {
-          this.errorMessage = err.error || 'Login failed. Incorrect email or password.';
+          this.errorMessage = typeof err.error === 'string' ? err.error : (err.error?.message || err.message || 'Login failed. Incorrect email or password.');
           this.isLoading = false;
         }
       });
