@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideRouter } from '@angular/router';
 import { JournalComponent } from './journal.component';
 
 describe('JournalComponent', () => {
@@ -8,7 +8,10 @@ describe('JournalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JournalComponent]
+      imports: [JournalComponent],
+      providers: [
+        provideRouter([])
+      ]
     })
     .compileComponents();
 
